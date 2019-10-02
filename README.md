@@ -3,11 +3,9 @@
 # concavetest
 
 Test package to benchmark Mapbox’s ‘concaveman’ algorithm in both
-javascipt and C++ versions. Requires `libv8` for the `concaveman`
-package which wraps the `.js` version.
+javascipt and C++ versions.
 
 ``` r
-library (concaveman)
 if (!"concavetest" %in% rownames (installed.packages ()))
     remotes::install_github("mpadge/concavetest")
 library (concavetest)
@@ -18,14 +16,16 @@ library (rbenchmark)
 n <- 1e4
 x <- runif (n)
 y <- runif (n)
-h <- concave (x, y)
 knitr::kable (rbenchmark::benchmark (
-                                     concave (x, y),
-                                     concaveman (cbind (x, y)),
+                                     c_js (x, y),
+                                     c_cpp (x, y),
                                      replications = 100))
 ```
 
-| test                    | replications | elapsed | relative | user.self | sys.self | user.child | sys.child |
-| :---------------------- | -----------: | ------: | -------: | --------: | -------: | ---------: | --------: |
-| concave(x, y)           |          100 |   1.808 |    1.000 |     1.791 |    0.017 |          0 |         0 |
-| concaveman(cbind(x, y)) |          100 |  13.150 |    7.273 |    20.807 |    0.276 |          0 |         0 |
+|   | test         | replications | elapsed | relative | user.self | sys.self | user.child | sys.child |
+| - | :----------- | -----------: | ------: | -------: | --------: | -------: | ---------: | --------: |
+| 2 | c\_cpp(x, y) |          100 |   1.603 |    1.000 |     1.588 |    0.013 |          0 |         0 |
+| 1 | c\_js(x, y)  |          100 |  10.060 |    6.276 |    10.294 |    0.084 |          0 |         0 |
+
+And C++ is loads faster than javascript. The end.
+
