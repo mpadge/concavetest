@@ -12,7 +12,9 @@ LazyData: true
 NeedsCompilation: yes
 Depends: R (>= 3.5.0)
 Imports:
-    Rcpp
+    jsonlite,
+    Rcpp,
+    V8
 LinkingTo: Rcpp
 SystemRequirements:
     C++11
