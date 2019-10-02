@@ -20,12 +20,13 @@ library (rbenchmark)
 ```
 
 ```{r benchmark}
-x <- runif (1e5)
-y <- runif (1e5)
+n <- 1e4
+x <- runif (n)
+y <- runif (n)
 h <- concave (x, y)
 knitr::kable (rbenchmark::benchmark (
                                      concave (x, y),
-                                     concaveman (x, y),
+                                     concaveman (cbind (x, y)),
                                      replications = 100))
 ```
 
