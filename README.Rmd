@@ -1,0 +1,32 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+
+# concavetest 
+
+Test package to benchmark Mapbox's 'concaveman' algorithm in both javascipt and
+C++ versions. Requires `libv8` for the `concaveman` package which wraps the
+`.js` version.
+
+```{r setup}
+library (concaveman)
+if (!"concavetest" %in% rownames (installed.packages ()))
+    remotes::install_github("mpadge/concavetest")
+library (concavetest)
+library (rbenchmark)
+```
+
+```{r benchmark}
+x <- runif (1e5)
+y <- runif (1e5)
+h <- concave (x, y)
+knitr::kable (rbenchmark::benchmark (
+                                     concave (x, y),
+                                     concaveman (x, y),
+                                     replications = 100))
+```
+
+
