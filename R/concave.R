@@ -1,3 +1,11 @@
+MASS_bandwidth.nrd <-
+function (x)
+{
+  r <- quantile(x, c(0.25, 0.75))
+  h <- (r[2L] - r[1L])/1.34
+  ## MASS does 4 * this
+  1.06 * min(sqrt(var(x)), h) * length(x)^(-1/5)
+}
 
 #' c_cpp
 #'
@@ -6,8 +14,11 @@
 #' @return hull
 #'
 #' @export
-c_cpp <- function (x, y, concavity = 2, length_threshold = 0)
+c_cpp <- function (x, y, concavity = 2, length_threshold = NULL)
 {
+    if (is.null(length_threshold)) {
+      length_threshold <- min(c(MASS_bandwidth.nrd(x), MASS_bandwidth.nrd(y)))
+    }
     xy <- data.frame (x = x, y = y)
     h <- grDevices::chull (xy)
 
